@@ -129,6 +129,24 @@ section{padding-block:clamp(64px,11vw,128px)}
   .events{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
+/* Gallery carousel */
+.gallery{--sw:min(82vw,920px);background:var(--ink);color:var(--paper);overflow:hidden}
+.gallery .sec-head{margin-bottom:clamp(28px,5vw,48px)}
+.track{position:relative;display:flex;gap:clamp(12px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding-inline:calc((100% - var(--sw))/2);scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 var(--sw);margin:0;scroll-snap-align:center;aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);opacity:.45;transform:scale(.94);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.slide img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);transition:filter .9s var(--ease)}
+.slide.on{opacity:1;transform:none}
+.slide.on img{filter:none}
+.g-ui{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:clamp(20px,3vw,32px);width:min(100% - 2*var(--gutter),var(--sw))}
+.bars{display:flex;flex:1;gap:6px}
+.bars button{flex:1;height:24px;padding:0;background:none;border:0;color:inherit;cursor:pointer;position:relative}
+.bars button::before{content:"";position:absolute;left:0;right:0;top:11px;height:2px;background:currentColor;opacity:.3;transition:opacity .4s}
+.bars button.on::before{opacity:1}
+.arrows{display:flex;gap:8px}
+.arrows button{width:48px;height:48px;border:1px solid var(--line-dark);border-radius:var(--radius);background:none;color:inherit;font:400 1.25rem/1 var(--sans);cursor:pointer;transition:background .3s,color .3s}
+.arrows button:hover{background:var(--paper);color:var(--ink)}
+
 /* Dress + music */
 .band{background:var(--mist)}
 .split{display:grid;gap:clamp(36px,5vw,64px)}
@@ -168,6 +186,10 @@ section{padding-block:clamp(64px,11vw,128px)}
 footer{padding:64px var(--gutter) max(64px,env(safe-area-inset-bottom));text-align:center;background:var(--ink);color:var(--paper)}
 footer .sig{font:400 var(--t-title)/1.1 var(--serif)}
 footer p+p{color:var(--soft-dark);margin-top:12px;font-size:var(--t-small);max-width:44ch;margin-inline:auto}
+
+footer .credit{margin-top:40px;font-size:.8125rem;color:var(--soft-dark)}
+footer .credit a{text-decoration:underline;text-underline-offset:3px}
+footer .credit a:hover{color:var(--paper)}
 
 /* Floating RSVP */
 .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:40;opacity:0;transform:translateY(24px);pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease)}
@@ -264,6 +286,28 @@ footer p+p{color:var(--soft-dark);margin-top:12px;font-size:var(--t-small);max-w
     </div>
   </section>
 
+  <section class="gallery" aria-roledescription="carrusel" aria-label="Fotos de Jo y Nati">
+    <div class="wrap">
+      <div class="sec-head reveal"><h2>Nosotros</h2></div>
+    </div>
+    <div class="track" id="track" tabindex="0">
+      <figure class="slide"><img src="fotos/01-jardin.webp" width="1920" height="1080" alt="Jo y Nati abrazados en un jardín, con montañas de fondo" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/02-lago.webp" width="1920" height="1080" alt="Jo y Nati en un barco sobre un lago de aguas turquesas" loading="lazy" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/03-teleferico.webp" width="1920" height="1080" alt="Jo y Nati en un teleférico con vista a un lago y montañas nevadas" loading="lazy" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/04-atardecer.webp" width="1920" height="1080" alt="Jo y Nati junto al agua durante un atardecer" loading="lazy" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/05-beso.webp" width="1920" height="1080" alt="Jo y Nati besándose frente a un lago con montañas nevadas" loading="lazy" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/06-montana.webp" width="1920" height="1080" alt="Jo y Nati abrazados en un cerro bajo un cielo azul" loading="lazy" decoding="async"></figure>
+      <figure class="slide"><img src="fotos/07-mar.webp" width="1920" height="1080" alt="Jo y Nati abrazados en un mar turquesa" loading="lazy" decoding="async"></figure>
+    </div>
+    <div class="wrap g-ui">
+      <div class="bars" id="bars"></div>
+      <div class="arrows">
+        <button type="button" id="prev" aria-label="Foto anterior">←</button>
+        <button type="button" id="next" aria-label="Foto siguiente">→</button>
+      </div>
+    </div>
+  </section>
+
   <section class="band">
     <div class="wrap split">
       <div class="reveal">
@@ -308,6 +352,7 @@ footer p+p{color:var(--soft-dark);margin-top:12px;font-size:var(--t-small);max-w
 <footer>
   <p class="sig">Jo <span class="amp">&amp;</span> Nati</p>
   <p>¡Cada vez falta menos! Esperamos contar con ustedes y compartir una jornada llena de alegría, música y buenos momentos.</p>
+  <p class="credit">Desarrollado por <a href="https://moadesign.com.ar" target="_blank" rel="noopener">moadesign</a></p>
 </footer>
 
 <div class="fab" id="fab"><a class="btn" href="#confirmar">Confirmar asistencia</a></div>
@@ -446,6 +491,41 @@ footer p+p{color:var(--soft-dark);margin-top:12px;font-size:var(--t-small);max-w
     },{rootMargin:'-42% 0px -42% 0px'});
     evs.forEach(function(e){io2.observe(e)});
   }
+
+  /* Gallery carousel: native scroll-snap + buttons + gentle autoplay */
+  (function(){
+    var sec=$('.gallery'),track=$('#track'),barsEl=$('#bars'),
+        slides=[].slice.call(track.children),cur=0,timer=null,stopped=false,visible=false,bars=[];
+    slides.forEach(function(s,i){
+      var b=document.createElement('button');b.type='button';
+      b.setAttribute('aria-label','Ir a la foto '+(i+1));
+      b.addEventListener('click',function(){go(i,true)});
+      barsEl.appendChild(b);bars.push(b);
+    });
+    function go(i,user){
+      cur=(i+slides.length)%slides.length;
+      var s=slides[cur];
+      track.scrollTo({left:s.offsetLeft-(track.clientWidth-s.offsetWidth)/2,behavior:reduce?'auto':'smooth'});
+      if(user)halt();
+    }
+    function play(){if(reduce||stopped||timer||!visible)return;timer=setInterval(function(){go(cur+1)},5000)}
+    function pause(){clearInterval(timer);timer=null}
+    function halt(){stopped=true;pause()}
+    $('#prev').addEventListener('click',function(){go(cur-1,true)});
+    $('#next').addEventListener('click',function(){go(cur+1,true)});
+    track.addEventListener('pointerdown',halt);
+    track.addEventListener('keydown',halt);
+    sec.addEventListener('pointerenter',pause);
+    sec.addEventListener('pointerleave',play);
+    if('IntersectionObserver' in window){
+      var so=new IntersectionObserver(function(es){
+        es.forEach(function(e){if(e.isIntersecting){var i=slides.indexOf(e.target);
+          slides.forEach(function(s,k){s.classList.toggle('on',k===i);bars[k].classList.toggle('on',k===i)});cur=i}});
+      },{root:track,threshold:.6});
+      slides.forEach(function(s){so.observe(s)});
+      new IntersectionObserver(function(es){visible=es[0].isIntersecting;visible?play():pause()},{threshold:.35}).observe(sec);
+    }else{slides[0].classList.add('on');bars[0].classList.add('on')}
+  })();
 
   /* Copy alias + little burst */
   var btn=$('#copy'),st=$('#status'),alias=$('#alias').textContent,box=$('#aliasBox');
